@@ -15,7 +15,7 @@
         {% if mensajes %}
             {% for m in mensajes %}
 
-                {# Mensaje enviado por el usuario actual (alineado a la derecha, azul) #}
+               
                 {% if m.de_usuario == request.user %}
                     <div style="margin-bottom: 8px; text-align: right;">
                         <div style="display: inline-block;
@@ -28,7 +28,7 @@
                         </div>
                     </div>
 
-                {# Mensaje del amigo (alineado a la izquierda, gris) #}
+                
                 {% else %}
                     <div style="margin-bottom: 8px; text-align: left;">
                         <div style="display: inline-block;

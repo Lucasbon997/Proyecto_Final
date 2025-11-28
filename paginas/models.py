@@ -71,7 +71,7 @@ class Reseña(models.Model):
         verbose_name = "Reseña"
         verbose_name_plural = "Reseñas"
         ordering = ["-fecha_creacion"]
-        unique_together = ("producto", "usuario")  # 1 reseña por usuario y producto
+        unique_together = ("producto", "usuario")
 
     def __str__(self):
         estado = "👍 Me gustó" if self.me_gusta else "👎 No me gustó"

@@ -5,9 +5,6 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 
 from .models import SolicitudAmistad, Amistad, ChatMensaje
-# Si no lo tenés arriba, asegurate de importar Mensaje y MensajeFormulario:
-# from .models import Mensaje
-# from .forms import MensajeFormulario
 
 
 @login_required
@@ -40,12 +37,6 @@ def nuevo_mensaje(request):
 
 
 def obtener_amigos(usuario):
-    """
-    Devuelve un queryset de usuarios que son amigos del usuario dado.
-    Como al aceptar una solicitud creamos dos filas (A->B y B->A),
-    alcanza con mirar las filas donde 'usuario' es el dueño de la amistad.
-    Así evitamos usar union() + distinct(), que dan problemas en SQLite.
-    """
     amigos_ids = Amistad.objects.filter(usuario=usuario).values_list("amigo_id", flat=True)
     return User.objects.filter(id__in=amigos_ids)
 
@@ -78,13 +69,11 @@ def enviar_solicitud_amistad(request, usuario_id):
         messages.error(request, "No puedes enviarte una solicitud a ti mismo.")
         return redirect("mensajeria:lista_amigos")
 
-    # Ya son amigos
     ya_son_amigos = Amistad.objects.filter(usuario=request.user, amigo=objetivo).exists()
     if ya_son_amigos:
         messages.info(request, "Esta persona ya es tu amiga.")
         return redirect("mensajeria:lista_amigos")
 
-    # Ya existe una solicitud pendiente?
     ya_hay_solicitud = SolicitudAmistad.objects.filter(
         de_usuario=request.user,
         para_usuario=objetivo,
@@ -111,11 +100,8 @@ def responder_solicitud_amistad(request, solicitud_id, accion):
     if accion == "aceptar":
         solicitud.estado = "aceptada"
         solicitud.save()
-
-        # Crear relación de amistad en ambos sentidos
         Amistad.objects.get_or_create(usuario=request.user, amigo=solicitud.de_usuario)
         Amistad.objects.get_or_create(usuario=solicitud.de_usuario, amigo=request.user)
-
         messages.success(request, "Solicitud de amistad aceptada.")
     elif accion == "rechazar":
         solicitud.estado = "rechazada"
@@ -163,14 +149,10 @@ def buscar_usuarios(request):
 @login_required
 def chat_con_amigo(request, amigo_id):
     amigo = get_object_or_404(User, pk=amigo_id)
-
-    # Verificar que sean amigos
     son_amigos = Amistad.objects.filter(usuario=request.user, amigo=amigo).exists()
     if not son_amigos:
         messages.error(request, "Solo puedes chatear con usuarios que tengas como amigos.")
         return redirect("mensajeria:lista_amigos")
-
-    # Mensajes entre ambos, en ambas direcciones
     mensajes = ChatMensaje.objects.filter(
         Q(de_usuario=request.user, para_usuario=amigo) |
         Q(de_usuario=amigo, para_usuario=request.user)

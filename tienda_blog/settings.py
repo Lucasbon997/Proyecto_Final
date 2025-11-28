@@ -20,7 +20,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
-    # Django
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -28,12 +27,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "cuentas.apps.CuentasConfig",
-
-    # Terceros
     "ckeditor",
     "ckeditor_uploader",
-
-    # Apps propias
     "nucleo",
     "paginas",
     "mensajeria",
@@ -54,7 +49,7 @@ ROOT_URLCONF = "tienda_blog.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],  # carpeta de templates global
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

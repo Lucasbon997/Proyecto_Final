@@ -2,7 +2,6 @@ from django import forms
 from .models import Reseña
 
 class ReseñaFormulario(forms.ModelForm):
-    # Campo visible para el usuario (like / dislike)
     OPINIONES = (
         ("like", "Me gustó 👍"),
         ("dislike", "No me gustó 👎"),
@@ -15,7 +14,7 @@ class ReseñaFormulario(forms.ModelForm):
 
     class Meta:
         model = Reseña
-        fields = ["texto"]  # solo texto del modelo
+        fields = ["texto"]
         labels = {
             "texto": "Tu reseña",
         }

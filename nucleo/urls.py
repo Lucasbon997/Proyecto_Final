@@ -5,5 +5,5 @@ app_name = "nucleo"
 
 urlpatterns = [
     path("", InicioView.as_view(), name="inicio"),
-    path("about/", AcercaDeView.as_view(), name="acerca_de"),  # route /about/
+    path("about/", AcercaDeView.as_view(), name="acerca_de"),
 ]
