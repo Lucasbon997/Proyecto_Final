@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Mensajes{% endblock %}
+
+{% block content %}
+<h1>Mensajes recibidos</h1>
+
+<a href="{% url 'mensajeria:nuevo_mensaje' %}">Nuevo mensaje</a>
+
+{% if mensajes %}
+  <ul>
+    {% for m in mensajes %}
+      <li>
+        {% if not m.leido %}<strong>(Nuevo)</strong>{% endif %}
+        <a href="{% url 'mensajeria:detalle_mensaje' m.pk %}">
+          {{ m.asunto }}
+        </a>
+        - De: {{ m.remitente.username }}
+        - {{ m.fecha_envio|date:"d/m/Y H:i" }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No tienes mensajes.</p>
+{% endif %}
+{% endblock %}

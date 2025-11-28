@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% block title %}{{ pagina.titulo }}{% endblock %}
+
+{% block content %}
+<div class="seccion detalle-producto">
+    <div class="detalle-producto-imagen">
+        {% if pagina.imagen %}
+            <img src="{{ pagina.imagen.url }}" alt="{{ pagina.titulo }}">
+        {% else %}
+            <div class="producto-imagen placeholder grande">Sin imagen</div>
+        {% endif %}
+    </div>
+
+    <div class="detalle-producto-info">
+        <h1>{{ pagina.titulo }}</h1>
+        <h3 class="detalle-subtitulo">{{ pagina.subtitulo }}</h3>
+
+        <p class="detalle-meta">
+            <strong>Categoría:</strong>
+            {% if pagina.categoria %}
+                {{ pagina.categoria.nombre }}
+            {% else %}
+                Sin categoría
+            {% endif %}
+            &nbsp;|&nbsp;
+            <strong>Autor:</strong> {{ pagina.autor.username }}
+            &nbsp;|&nbsp;
+            <strong>Fecha:</strong> {{ pagina.fecha_publicacion|date:"d/m/Y" }}
+        </p>
+
+        <p class="detalle-precio">
+            <strong>Precio:</strong> $ {{ pagina.precio }}
+        </p>
+
+        <div class="detalle-contenido">
+            {{ pagina.contenido|safe }}
+        </div>
+
+        <div class="detalle-acciones">
+            {% if user.is_authenticated %}
+                {% if compra_usuario %}
+                    <p><strong>Ya compraste este producto.</strong></p>
+                    <p>Tu licencia: <code>{{ compra_usuario.licencia }}</code></p>
+                {% else %}
+                    <form method="post" action="{% url 'paginas:comprar_producto' pagina.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-resaltado">Comprar</button>
+                    </form>
+                {% endif %}
+            {% else %}
+                <p>
+                    Debes <a href="{% url 'cuentas:ingresar' %}">iniciar sesión</a> para comprar.
+                </p>
+            {% endif %}
+
+            {% if user.is_authenticated and user.is_staff %}
+                <hr>
+                <a href="{% url 'paginas:editar_pagina' pagina.pk %}" class="btn btn-pequeño">Editar</a>
+                <a href="{% url 'paginas:eliminar_pagina' pagina.pk %}" class="btn btn-pequeño btn-secundario">
+                    Eliminar
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="seccion reseñas-bloque">
+    <h2 class="titulo-seccion">Reseñas del producto</h2>
+
+    {# FORMULARIO / BLOQUE DE RESEÑA DEL USUARIO #}
+    {% if user.is_authenticated %}
+        {% if compra_usuario and not reseña_usuario %}
+            <div class="reseña-form-card">
+                <h3>Dejá tu opinión</h3>
+                <form method="post" action="{% url 'paginas:crear_reseña' pagina.pk %}">
+                    {% csrf_token %}
+
+                    <div class="reseña-like-group">
+                        {{ formulario_reseña.opinion.label_tag }}
+                        <div class="reseña-opciones-like">
+                            {{ formulario_reseña.opinion }}
+                        </div>
+                    </div>
+
+                    <div class="reseña-texto-group">
+                        {{ formulario_reseña.texto.label_tag }}
+                        {{ formulario_reseña.texto }}
+                    </div>
+
+                    <button type="submit" class="btn btn-resaltado">Enviar reseña</button>
+                </form>
+            </div>
+        {% elif reseña_usuario %}
+            <div class="reseña-form-card">
+                <h3>Tu reseña</h3>
+                <p class="reseña-estado-usuario">
+                    {% if reseña_usuario.me_gusta %}
+                        👍 Marcaste que te gustó este producto.
+                    {% else %}
+                        👎 Marcaste que no te gustó este producto.
+                    {% endif %}
+                </p>
+                <p>{{ reseña_usuario.texto }}</p>
+
+                <div style="margin-top: 8px;">
+                    <a href="{% url 'paginas:editar_reseña' reseña_usuario.pk %}"
+                       class="btn btn-pequeño">
+                        Editar reseña
+                    </a>
+                </div>
+            </div>
+        {% else %}
+            <p class="texto-centrado">
+                Debes comprar este producto para dejar una reseña.
+            </p>
+        {% endif %}
+    {% else %}
+        <p class="texto-centrado">
+            Debes <a href="{% url 'cuentas:ingresar' %}">iniciar sesión</a> para dejar una reseña.
+        </p>
+    {% endif %}
+
+    {# LISTADO DE TODAS LAS RESEÑAS #}
+    <h3 style="margin-top: 20px;">Opiniones de otros usuarios</h3>
+
+    {% if reseñas %}
+        <ul class="reseñas-lista">
+            {% for r in reseñas %}
+                <li class="reseña-item">
+                    <div class="reseña-header">
+                        <strong>{{ r.usuario.username }}</strong>
+                        <span class="reseña-fecha">
+                            {{ r.fecha_creacion|date:"d/m/Y H:i" }}
+                        </span>
+                        <span class="reseña-estado">
+                            {% if r.me_gusta %}
+                                👍 Le gustó
+                            {% else %}
+                                👎 No le gustó
+                            {% endif %}
+                        </span>
+                    </div>
+                    <p class="reseña-texto">{{ r.texto }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="texto-centrado">
+            Aún no hay reseñas para este producto.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}
+
+

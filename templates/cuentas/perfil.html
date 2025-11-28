@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Mi perfil{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Mi perfil</h1>
+
+    <div class="perfil-contenedor">
+        <div class="perfil-avatar">
+            {% if perfil.avatar %}
+                <img src="{{ perfil.avatar.url }}" alt="Avatar de {{ request.user.username }}">
+            {% else %}
+                <div class="avatar-placeholder">
+                    {{ request.user.username|first|upper }}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="perfil-datos">
+            <p><strong>Usuario:</strong> {{ request.user.username }}</p>
+            <p><strong>Nombre:</strong> {{ request.user.first_name }}</p>
+            <p><strong>Apellido:</strong> {{ request.user.last_name }}</p>
+            <p><strong>Email:</strong> {{ request.user.email }}</p>
+            <p><strong>Biografía:</strong> {{ perfil.biografia|default:"(sin biografía)" }}</p>
+            <p><strong>Saldo:</strong> $ {{ perfil.saldo }}</p>
+
+            <div class="perfil-acciones">
+                <a href="{% url 'cuentas:editar_perfil' %}" class="btn btn-pequeño">
+                    Editar perfil
+                </a>
+                <a href="{% url 'cuentas:cambiar_password' %}" class="btn btn-pequeño btn-secundario">
+                    Cambiar contraseña
+                </a>
+                
+                <a href="{% url 'paginas:mis_compras' %}" class="btn btn-pequeño btn-resaltado">
+                    Mis compras
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="perfil-saldo-opciones">
+        <h2>Opciones de saldo</h2>
+        <ul>
+            <li>
+                <a href="{% url 'cuentas:recargar_saldo_regalo' %}">
+                    Cargar saldo con tarjeta de regalo
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'cuentas:recargar_saldo_tarjeta' %}">
+                    Cargar saldo con tarjeta de crédito/débito (simulado)
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Formulario producto{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Editar producto{% else %}Crear producto{% endif %}</h1>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Guardar</button>
+</form>
+{% endblock %}

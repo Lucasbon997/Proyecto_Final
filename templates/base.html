@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Tienda Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+</head>
+<body>
+
+<header class="header">
+    <div class="header-contenido">
+        <div class="logo">
+            <a href="{% url 'nucleo:inicio' %}">🛒 TiendaBlog</a>
+        </div>
+
+        <nav class="nav-principal">
+                <a href="{% url 'nucleo:inicio' %}">Inicio</a>
+                <a href="{% url 'paginas:lista_paginas' %}">Productos</a>
+                <a href="/about/">Acerca de mí</a>
+                <a href="{% url 'paginas:blog_inicio' %}">Blog</a>
+        </nav>
+
+        <div class="nav-usuario">
+            {% if user.is_authenticated %}
+                <span class="nav-usuario-nombre">
+                    Hola, {{ user.username }}
+                </span>
+                <a href="{% url 'mensajeria:lista_amigos' %}" class="btn-pequeño">
+                    Amigos / Chat
+                </a>
+                <a href="{% url 'cuentas:perfil' %}" class="btn-pequeño">
+                    Mi perfil
+                </a>
+                <a href="{% url 'cuentas:salir' %}" class="btn-pequeño btn-secundario">
+                    Salir
+                </a>
+            {% else %}
+                <a href="{% url 'cuentas:ingresar' %}" class="btn-pequeño">
+                    Ingresar
+                </a>
+                <a href="{% url 'cuentas:registrarse' %}" class="btn-pequeño btn-resaltado">
+                    Crear cuenta
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</header>
+
+<main class="contenedor-principal">
+
+    {# Mensajes de Django #}
+    {% if messages %}
+        <div class="mensajes">
+            {% for mensaje in messages %}
+                <div class="mensaje mensaje-{{ mensaje.tags|default:'info' }}">
+                    {{ mensaje }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>Proyecto Django – Tienda / Blog – Entrega final</p>
+</footer>
+
+</body>
+</html>
+

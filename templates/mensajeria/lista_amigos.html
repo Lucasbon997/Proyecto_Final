@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Amigos{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Mis amigos</h1>
+
+    <p>
+        <a href="{% url 'mensajeria:buscar_usuarios' %}" class="btn btn-pequeño">
+            Buscar usuarios
+        </a>
+    </p>
+
+    <h2>Amigos</h2>
+    {% if amigos %}
+        <ul>
+            {% for amigo in amigos %}
+                <li style="margin-bottom: 6px;">
+                    {{ amigo.username }}
+                    <a href="{% url 'mensajeria:chat_con_amigo' amigo.id %}" class="btn btn-pequeño">
+                        Abrir chat
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="texto-centrado">Todavía no tienes amigos agregados.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Solicitudes recibidas</h2>
+    {% if solicitudes_recibidas %}
+        <ul>
+            {% for s in solicitudes_recibidas %}
+                <li style="margin-bottom: 6px;">
+                    {{ s.de_usuario.username }}
+                    <a href="{% url 'mensajeria:responder_solicitud_amistad' s.id 'aceptar' %}" class="btn btn-pequeño btn-resaltado">
+                        Aceptar
+                    </a>
+                    <a href="{% url 'mensajeria:responder_solicitud_amistad' s.id 'rechazar' %}" class="btn btn-pequeño btn-secundario">
+                        Rechazar
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="texto-centrado">No tienes solicitudes pendientes.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Solicitudes enviadas</h2>
+    {% if solicitudes_enviadas %}
+        <ul>
+            {% for s in solicitudes_enviadas %}
+                <li>
+                    {{ s.para_usuario.username }} (Pendiente)
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="texto-centrado">No has enviado solicitudes recientes.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Blog{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Blog / Centro de ayuda</h1>
+
+    <p class="texto-centrado">
+        Bienvenido al área de ayuda de la tienda. Aquí vas a encontrar respuestas, soporte
+        y una guía completa para tus compras.
+    </p>
+
+    <div class="soporte-bloques">
+        <div class="tarjeta">
+            <h3>Preguntas frecuentes</h3>
+            <p>Respuestas a las dudas más comunes sobre cuentas, compras y uso del sitio.</p>
+            <a href="{% url 'paginas:faq' %}" class="btn btn-resaltado btn-pequeño">Ver FAQ</a>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Soporte</h3>
+            <p>¿Tuviste algún problema? Te explicamos cómo pedir ayuda dentro de la plataforma.</p>
+            <a href="{% url 'paginas:soporte' %}" class="btn btn-pequeño">Ir a soporte</a>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Guía de compra</h3>
+            <p>Paso a paso para registrarte, cargar saldo, comprar y usar tus licencias.</p>
+            <a href="{% url 'paginas:guia_compra' %}" class="btn btn-pequeño">Leer guía</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <p class="texto-centrado" style="margin-top: 15px;">
+        También podés visitar la sección de <a href="{% url 'paginas:lista_paginas' %}">productos</a>
+        para ver todo lo disponible en la tienda.
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Editar reseña{% endblock %}
+
+{% block content %}
+<div class="seccion reseñas-bloque">
+    <h1 class="titulo-seccion">Editar reseña</h1>
+
+    <p><strong>Producto:</strong> {{ pagina.titulo }}</p>
+
+    <div class="reseña-form-card">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="reseña-like-group">
+                {{ formulario_reseña.opinion.label_tag }}
+                <div class="reseña-opciones-like">
+                    {{ formulario_reseña.opinion }}
+                </div>
+            </div>
+
+            <div class="reseña-texto-group">
+                {{ formulario_reseña.texto.label_tag }}
+                {{ formulario_reseña.texto }}
+            </div>
+
+            <button type="submit" class="btn btn-resaltado">Guardar cambios</button>
+            <a href="{% url 'paginas:detalle_pagina' pagina.pk %}" class="btn btn-secundario btn-pequeño">
+                Cancelar
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

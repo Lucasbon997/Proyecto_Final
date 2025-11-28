@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Soporte{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Soporte</h1>
+
+    <p class="texto-centrado">
+        Si tenés algún problema con tu cuenta, tus productos o el funcionamiento del sitio,
+        podés usar estas opciones de soporte.
+    </p>
+
+    <div class="soporte-bloques">
+        <div class="tarjeta">
+            <h3>Problemas con la cuenta</h3>
+            <p>
+                Verificá primero tus datos en <strong>Mi perfil</strong>.
+                Si el problema persiste, podés enviar un mensaje privado a un administrador usando
+                el sistema de <strong>mensajería</strong> del sitio.
+            </p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Problemas con una compra</h3>
+            <p>
+                Revisá tu saldo, la licencia generada y la reseña del producto.
+                Si algo no coincide, contactá soporte detallando el nombre del producto y la fecha de compra.
+            </p>
+        </div>
+
+        <div class="tarjeta">
+            <h3>Reporte de errores</h3>
+            <p>
+                Si encontrás un error o comportamiento extraño, anotá los pasos que seguiste
+                y envía un mensaje desde la sección de <strong>mensajes</strong> a la cuenta de soporte.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

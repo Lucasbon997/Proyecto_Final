@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Bienvenido a TiendaBlog</h1>
+    <p>Esta es tu tienda/blog donde puedes publicar productos, ofertas y noticias.</p>
+</div>
+
+{# TARJETAS DESTACADAS #}
+<div class="seccion" style="margin-top: 20px;">
+    <h2 class="titulo-seccion">Destacados</h2>
+
+    {% if destacados %}
+        <div class="productos-grid">
+            {% for card in destacados %}
+                <div class="producto-card">
+                    {% if card.imagen %}
+                        <img src="{{ card.imagen.url }}" alt="{{ card.titulo }}" class="producto-imagen">
+                    {% else %}
+                        <div class="producto-imagen placeholder">
+                            Sin imagen
+                        </div>
+                    {% endif %}
+
+                    <div class="producto-contenido">
+                        <h3>
+                            {{ card.titulo }}
+                            {% if card.es_oferta %}
+                                <span style="font-size: 12px; color: #16a34a;">(Oferta)</span>
+                            {% endif %}
+                        </h3>
+                        <p class="producto-subtitulo">{{ card.descripcion_corta }}</p>
+                    </div>
+
+                    <div class="producto-acciones">
+                        {% if card.producto %}
+                            <a href="{% url 'paginas:detalle_pagina' card.producto.pk %}" class="btn">
+                                Ver producto
+                            </a>
+                        {% else %}
+                            <span style="font-size: 13px; color: #6b7280;">
+                                Sin producto asociado
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="texto-centrado">No hay destacados configurados aún.</p>
+    {% endif %}
+</div>
+
+{# OPCIONAL: mostrar algunos productos recientes debajo #}
+{% if productos_recientes %}
+    <div class="seccion" style="margin-top: 20px;">
+        <h2 class="titulo-seccion">Productos recientes</h2>
+
+        <div class="productos-grid">
+            {% for pagina in productos_recientes %}
+                <div class="producto-card">
+                    {% if pagina.imagen %}
+                        <img src="{{ pagina.imagen.url }}" alt="{{ pagina.titulo }}" class="producto-imagen">
+                    {% else %}
+                        <div class="producto-imagen placeholder">Sin imagen</div>
+                    {% endif %}
+                    <div class="producto-contenido">
+                        <h3>{{ pagina.titulo }}</h3>
+                        <p class="producto-subtitulo">{{ pagina.subtitulo }}</p>
+                        <p class="producto-precio">Precio: $ {{ pagina.precio }}</p>
+                    </div>
+                    <div class="producto-acciones">
+                        <a href="{% url 'paginas:detalle_pagina' pagina.pk %}" class="btn">
+                            Ver producto
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

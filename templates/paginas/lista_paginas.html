@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Productos{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Blog / Productos</h1>
+
+    <div class="blog-subsecciones">
+        <a href="{% url 'paginas:faq' %}" class="btn btn-pequeño">
+            Preguntas frecuentes
+        </a>
+        <a href="{% url 'paginas:soporte' %}" class="btn btn-pequeño">
+            Soporte
+        </a>
+        <a href="{% url 'paginas:guia_compra' %}" class="btn btn-pequeño">
+            Guía de compra
+        </a>
+    </div>
+   
+</div>
+
+<div class="seccion">
+    <h1 class="titulo-seccion">Productos</h1>
+
+    <div class="barra-filtros">
+    <form method="get" class="form-filtros">
+
+        <input type="text"
+               name="q"
+               placeholder="Buscar producto..."
+               value="{{ request.GET.q }}">
+
+        <select name="categoria">
+            <option value="">Todas las categorías</option>
+            {% for cat in categorias %}
+                <option value="{{ cat.id }}"
+                    {% if categoria_seleccionada == cat.id|stringformat:'s' %}selected{% endif %}>
+                    {{ cat.nombre }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Filtrar</button>
+    </form>
+</div>
+
+
+    {% if paginas %}
+        <div class="productos-grid">
+            {% for pagina in paginas %}
+                <div class="producto-card">
+                    {% if pagina.imagen %}
+                        <img src="{{ pagina.imagen.url }}" alt="{{ pagina.titulo }}" class="producto-imagen">
+                    {% else %}
+                        <div class="producto-imagen placeholder">Sin imagen</div>
+                    {% endif %}
+
+                    <div class="producto-contenido">
+                        <h3>{{ pagina.titulo }}</h3>
+                        <p class="producto-subtitulo">{{ pagina.subtitulo }}</p>
+                        <p class="producto-precio">Precio: $ {{ pagina.precio }}</p>
+                    </div>
+
+                    <div class="producto-acciones">
+                        <a href="{% url 'paginas:detalle_pagina' pagina.pk %}" class="btn">
+                            Ver producto
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="texto-centrado">No hay productos aún.</p>
+    {% endif %}
+
+    {% if user.is_authenticated and user.is_staff %}
+        <div class="acciones-inferiores">
+            <a href="{% url 'paginas:crear_pagina' %}" class="btn btn-resaltado">
+                + Crear nuevo producto
+            </a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

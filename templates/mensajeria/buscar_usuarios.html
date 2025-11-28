@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Buscar usuarios{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Buscar usuarios</h1>
+
+    <form method="get" class="form-filtros">
+        <input type="text" name="q" placeholder="Nombre de usuario..." value="{{ query }}">
+        <button type="submit" class="btn btn-pequeño">Buscar</button>
+    </form>
+
+    <hr>
+
+    {% if query %}
+        <h2>Resultados para "{{ query }}"</h2>
+        {% if resultados %}
+            <ul>
+                {% for u in resultados %}
+                    <li style="margin-bottom: 6px;">
+                        {{ u.username }}
+
+                        {% if u.id in amigos_ids %}
+                            · Ya es tu amigo
+                        {% elif u.id in solicitudes_enviadas_ids %}
+                            · Solicitud enviada
+                        {% elif u.id in solicitudes_recibidas_ids %}
+                            · Te envió una solicitud (revísala en "Mis amigos")
+                        {% else %}
+                            <a href="{% url 'mensajeria:enviar_solicitud_amistad' u.id %}"
+                               class="btn btn-pequeño btn-resaltado">
+                                Enviar solicitud de amistad
+                            </a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="texto-centrado">No se encontraron usuarios.</p>
+        {% endif %}
+    {% else %}
+        <p>Escribe un nombre de usuario para buscar.</p>
+    {% endif %}
+</div>
+{% endblock %}

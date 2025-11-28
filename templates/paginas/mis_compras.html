@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Mis compras{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Mis compras</h1>
+
+    {% if compras %}
+        <div class="tabla-responsive">
+            <table class="tabla">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Fecha de compra</th>
+                        <th>Precio pagado</th>
+                        <th>Licencia</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for compra in compras %}
+                        <tr>
+                            <td>{{ compra.producto.titulo }}</td>
+                            <td>{{ compra.fecha_compra|date:"d/m/Y H:i" }}</td>
+                            <td>${{ compra.precio_pagado }}</td>
+                            <td>
+                                <span class="badge-licencia">
+                                    {{ compra.licencia }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'paginas:detalle_pagina' compra.producto.pk %}"
+                                   class="btn btn-pequeño">
+                                    Ver producto
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="texto-centrado">
+            Todavía no realizaste ninguna compra.
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

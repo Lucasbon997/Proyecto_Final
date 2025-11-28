@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Eliminar página{% endblock %}
+
+{% block content %}
+<h1>¿Seguro que quieres eliminar "{{ object.titulo }}"?</h1>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Sí, eliminar</button>
+  <a href="{% url 'paginas:lista_paginas' %}">Cancelar</a>
+</form>
+{% endblock %}

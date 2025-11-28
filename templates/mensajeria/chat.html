@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Chat con {{ amigo.username }}{% endblock %}
+
+{% block content %}
+<div class="seccion">
+    <h1 class="titulo-seccion">Chat con {{ amigo.username }}</h1>
+
+    <div style="max-height: 400px;
+                overflow-y: auto;
+                border: 1px solid #e5e7eb;
+                padding: 10px;
+                border-radius: 8px;
+                background: #f9fafb;">
+
+        {% if mensajes %}
+            {% for m in mensajes %}
+
+                {# Mensaje enviado por el usuario actual (alineado a la derecha, azul) #}
+                {% if m.de_usuario == request.user %}
+                    <div style="margin-bottom: 8px; text-align: right;">
+                        <div style="display: inline-block;
+                                    padding: 6px 10px;
+                                    border-radius: 10px;
+                                    background: #2563eb;
+                                    color: white;">
+                            <small>{{ m.fecha_envio|date:"d/m/Y H:i" }}</small><br>
+                            {{ m.texto }}
+                        </div>
+                    </div>
+
+                {# Mensaje del amigo (alineado a la izquierda, gris) #}
+                {% else %}
+                    <div style="margin-bottom: 8px; text-align: left;">
+                        <div style="display: inline-block;
+                                    padding: 6px 10px;
+                                    border-radius: 10px;
+                                    background: #e5e7eb;
+                                    color: #111827;">
+                            <small>{{ m.fecha_envio|date:"d/m/Y H:i" }}</small><br>
+                            {{ m.texto }}
+                        </div>
+                    </div>
+                {% endif %}
+
+            {% endfor %}
+        {% else %}
+            <p class="texto-centrado">No hay mensajes aún. ¡Escribe el primero!</p>
+        {% endif %}
+    </div>
+
+    <form method="post" style="margin-top: 10px;">
+        {% csrf_token %}
+        <textarea name="texto"
+                  rows="2"
+                  style="width: 100%;
+                         border-radius: 8px;
+                         border: 1px solid #d1d5db;
+                         padding: 6px;"></textarea>
+        <button type="submit"
+                class="btn btn-resaltado"
+                style="margin-top: 6px;">
+            Enviar
+        </button>
+    </form>
+</div>
+{% endblock %}
